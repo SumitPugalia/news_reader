@@ -28,7 +28,7 @@ class Subscription(models.Model):
     subscriber = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="subscriber_id", on_delete=models.CASCADE)
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    active = models.BooleanField()
+    active = models.BooleanField(default=True)
     
     class Meta:
         db_table = "subscriptions"

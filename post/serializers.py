@@ -1,5 +1,16 @@
 from rest_framework import serializers 
-from .models import Post, Tag
+from .models import Post, Tag, Subscription
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    subscriber = serializers.ReadOnlyField(source='user.id')
+    
+    class Meta:
+        model = Subscription
+        fields = ['subscriber', 'tag', 'user']
+        extra_kwargs = {
+            'tag': {'required': False},
+            'user': {'required': False},
+        }
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:

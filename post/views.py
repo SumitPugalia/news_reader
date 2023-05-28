@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response  
 from rest_framework import status  
 from .models import Post, Tag  
-from .serializers import PostSerializer, TagSerializer
+from .serializers import PostSerializer, TagSerializer, SubscriptionSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 class PostView(APIView):
@@ -58,9 +58,21 @@ class TagView(APIView):
 
     def post(self, request):
         serializer = TagSerializer(data=request.data)
+        user=request.user
         if serializer.is_valid(): 
             serializer.save()
             return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)  
         else:  
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST) 
 
+class SubscriptionView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = SubscriptionSerializer(data=request.data)
+        user=request.user
+        if serializer.is_valid(): 
+            serializer.save(subscriber=user)
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)  
+        else:  
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST) 
